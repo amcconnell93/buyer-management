@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "@market/react-bindings": "^2.0.0-beta",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

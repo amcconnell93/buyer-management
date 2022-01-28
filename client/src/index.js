@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import "@market/web-components/dist/market/market.css";
+import { applyPolyfills, defineCustomElements } from '@market/web-components/loader';
+
+applyPolyfills().then(() => {
+  defineCustomElements(window);
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

@@ -1,0 +1,5 @@
+@import url(https://square-fonts-production-f.squarecdn.com/square-sans.min.css);
+
+body, html {
+  font-family: var(--core-type-font-family);
+}

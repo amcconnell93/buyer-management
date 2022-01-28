@@ -1,18 +1,21 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useSearchParams
 } from "react-router-dom";
+import "./App.css";
+
+import { MarketContentCard } from "@market/react-bindings";
 
 const ManagePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(searchParams.get("buyer_management_token"))
   return (
-    <div>
+    <MarketContentCard>
       <p>Manage page</p>
-    </div>
+    </MarketContentCard>
   );
 }
 
