@@ -2,7 +2,7 @@
   "name": "buyer-management",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/amcconnell93/buyer-management.git",
+  "repository": "https://github.com/squareup/buyer-management.git",
   "author": "Andrew McConnell <amcconnell@squareup.com>",
   "license": "MIT"
 }
