@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+EXPECTED="$(cat .node-version)"
+ACTUAL="$(node --version)"
+ACTUAL=${ACTUAL//v/}
+
+if [ "$EXPECTED" != "$ACTUAL" ]; then
+  echo "⚠️  Expected Node.js v$EXPECTED, but found v$ACTUAL."
+  exit 1
+fi

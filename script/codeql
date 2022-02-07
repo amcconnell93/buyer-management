@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Runs codeql code scanning across the entire codebase
+# This was written by #seller-product-security-engineering for the #code-scanning effort
+# Feel free to reach out to either slack channel, #code-scanning-feedback, or aepifano@ with any questions!
+
+set -eux -o pipefail
+
+export CODEQL_LANGUAGE="javascript"
+
+if [ -d /tmp/code-scanner-scripts ]; then
+    rm -rf /tmp/code-scanner-scripts
+fi
+git clone org-49461806@github.com:squareup/code-scanner-scripts.git /tmp/code-scanner-scripts --depth 1 -q --branch 1.x-green
+
+. /tmp/code-scanner-scripts/common.sh
+/tmp/code-scanner-scripts/install-dependencies.sh
+/tmp/code-scanner-scripts/run-codeql.sh

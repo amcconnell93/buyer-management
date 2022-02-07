@@ -1,0 +1,9 @@
+test_command: 'script/ci'
+targets:
+  - type: build
+  - type: eslint
+  # - type: test
+build_artifacts:
+  buyer-management:
+    distributions:
+      - el7

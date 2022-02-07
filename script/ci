@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# If set, the return value of a pipeline is the value of the last (rightmost)
+# command to exit with a non-zero status, or zero if all commands in the
+# pipeline exit successfully.
+set -euo pipefail
+
+# Just some logging to make it easier to see when CI begins
+echo "-----------------------------------------------------------------------------------------------------------"
+echo "CI BEGINS"
+
+# -------
+# enable gcc 4.9 so that unix-dgram dependency will build
+export MANPATH=$(man -w)
+source /opt/rh/devtoolset-7/enable
+# -------
+
+# More on these scripts below
+source ./script/install-node-with-cache
+./script/verify-node-version
+
+export CI=1
+
+function install_yarn_dependencies() {
+    echo "Installing Yarn Dependencies"
+    yarn config set cafile "/etc/ssl/certs/ca-bundle.crt"
+    yarn install --frozen-lockfile --ignore-optional
+}
+
+function run {
+    if [ -z $TEST_RUNNER ]; then
+        echo "Missing TEST_RUNNER" && exit 1
+    fi
+    
+    case "$TEST_RUNNER" in
+        build)
+            cd server && yarn build && cd ..
+            cd client && yarn build && cd ..
+        ;;
+        eslint)
+            cd server && yarn lint && cd ..
+            cd client && yarn lint && cd ..
+        ;;
+        test)
+            cd server && yarn test && cd ..
+            cd client && yarn test && cd ..
+        ;;
+        *)
+            echo "$TEST_RUNNER does not match any known test runners" >&2
+            exit 1
+        ;;
+    esac
+}
+
+function prepare_and_run() {
+    install_yarn_dependencies &&
+    run
+}
+
+prepare_and_run

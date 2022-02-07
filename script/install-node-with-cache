@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# This script installs Node.js into `./bin/node` folder. It expects `./node-version` file
+# to contains desired Node.js version. When downloaded for the first time, the TAR file
+# is stored in `/mnt/nfs/shared-cache/Node.js` and then reused.
+#
+# If `source` command is used, the script will update $PATH.
+#
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # script is being executed, not sources
+  set -euo pipefail
+fi
+
+# for local environment
+# CACHE_DIR="./tmp/Node.js"
+
+# for Kochiku
+CACHE_DIR="/mnt/nfs/shared-cache/Node.js"
+
+NODE_VERSION="$(cat .node-version)"
+TAR_DIR_NAME="node-v${NODE_VERSION}-linux-x64"
+TAR_FILE_NAME="${TAR_DIR_NAME}.tar.xz"
+
+(
+  if [ ! -f "$CACHE_DIR/$TAR_FILE_NAME" ]; then
+    mkdir -p "$CACHE_DIR"
+    cd "$CACHE_DIR"
+    curl -Os "https://Node.js.org/dist/v${NODE_VERSION}/${TAR_FILE_NAME}"
+  fi
+)
+
+tar xf "$CACHE_DIR/$TAR_FILE_NAME" -C ./bin
+mv "./bin/$TAR_DIR_NAME" "./bin/node"
+BIN_PATH="$(realpath "bin/node/bin")"
+export PATH="$BIN_PATH":$PATH
+
+npm install -g npm@latest
+
+npm config set registry "https://artifactory.global.square/artifactory/api/npm/square-npm/"
+npm config set cafile "/etc/ssl/certs/ca-bundle.crt"
+npm ci
